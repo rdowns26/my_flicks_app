@@ -19,9 +19,18 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
 
+    // Initialize a UIRefreshControl
+    let refreshControl = UIRefreshControl()
+    refreshControl.addTarget(self, action: "refreshAction:", forControlEvents: UIControlEvents.ValueChanged)
+    tableView.insertSubview(refreshControl, atIndex: 0) //Showing the refresh view
+        
     tableView.dataSource = self
     tableView.delegate = self 
         // Do any additional setup after loading the view.
+    networkCall()
+    }
+    
+    func networkCall(){
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         let url = NSURL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
         let request = NSURLRequest(URL: url!)
@@ -52,8 +61,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                 }
         })
         task.resume()
-    
-    
     }
 
     override func didReceiveMemoryWarning() {
@@ -98,5 +105,14 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func refreshAction(refreshControl: UIRefreshControl){
+        networkCall()
+        refreshControl.endRefreshing()
+    }
+    
+    func refreshAction(){
+        
+    }
 
 }
